@@ -5,41 +5,129 @@ module.exports = async function(client, reaction, user) {
 
   if (reaction === undefined) return console.log("reaction = " + reaction);
   const message = reaction.message
+  let channel = message.guild.channels.find(c => c.name.includes("general"));
 
   if (reaction.emoji.name !== '⭐') {
+    if (channel === null) return;
     if (message.guild && message.author.id !== user.id && !message.author.bot && !user.bot) {
+
       const messagekey = `${message.guild.id}-${message.author.id}`;
       const reactionkey = `${message.guild.id}-${user.id}`;
 
-      //triggers for new users
-      client.points.ensure(messagekey, {
-        user: message.author.id,
-        guild: message.guild.id,
-        points: 0,
-        level: 1
-      });
-      client.points.ensure(reactionkey, {
-        user: user.id,
-        guild: message.guild.id,
-        points: 0,
-        level: 1
-      });
+      if (reaction.emoji.name === '💉') {
 
-      let messagepoints = client.points.get(messagekey, "points");
-      let reactionpoints = client.points.get(reactionkey, "points");
+        //triggers for new users
+        client.points.ensure(messagekey, {
+          user: message.author.id,
+          guild: message.guild.id,
+          points: 0,
+          level: 1,
+          gp: 0,
+          maxgp: 0
+        });
+        client.points.ensure(reactionkey, {
+          user: user.id,
+          guild: message.guild.id,
+          points: 0,
+          level: 1,
+          gp: 0,
+          maxgp: 0
+        });
 
-      //increment points
-      if (messagepoints >= 10){
-        client.points.math(messagekey, "-", 10, "points");
-      } else {
-        client.points.set(messagekey, 0, "points");
+        if (message.channel === channel) {
+
+          //increment points
+          client.points.math(messagekey, "-", 10, "points");
+          client.points.math(reactionkey, "-", 2, "points");
+
+          // Calculate the user's current level
+          const curLevelmessage = Math.floor(0.1 * Math.sqrt(client.points.get(messagekey, "points")));
+          const curLevelreaction = Math.floor(0.1 * Math.sqrt(client.points.get(reactionkey, "points")));
+
+          // Act upon level up by sending a message and updating the user's level in enmap.
+          if (client.points.get(messagekey, "level") < curLevelmessage) {
+            channel.send(`${message.author} grew to LV.${curLevelmessage}!`);
+            client.points.set(messagekey, curLevelmessage, "level");
+          }
+          if (client.points.get(reactionkey, "level") < curLevelreaction) {
+            channel.send(`${message.author} grew to LV.${curLevelreaction}!`);
+            client.points.set(messagekey, curLevelreaction, "level");
+          }
+        }
       }
-      if (reactionpoints >= 2){
-        client.points.math(reactionkey, "-", 2, "points");
-      } else {
-        client.points.set(reactionkey, 0, "points");
+
+      if (reaction.emoji.name === '💰') {
+        const messagekey = `${message.guild.id}-${message.author.id}`;
+        const reactionkey = `${message.guild.id}-${user.id}`;
+
+        //triggers for new users
+        client.points.ensure(messagekey, {
+          user: message.author.id,
+          guild: message.guild.id,
+          points: 0,
+          level: 1,
+          gp: 0,
+          maxgp: 0
+        });
+        client.points.ensure(reactionkey, {
+          user: user.id,
+          guild: message.guild.id,
+          points: 0,
+          level: 1,
+          gp: 0,
+          maxgp: 0
+        });
+
+        //increment points
+        client.points.math(messagekey, "-", 100, "gp");
+        //client.points.math(reactionkey, "+", 0, "gp");
+
+        // Calculate the user's current level
+        const curgpmessage = client.points.get(messagekey, "gp");
+        const curgpreaction = client.points.get(reactionkey, "gp");
+
+        // Act upon level up by sending a message and updating the user's level in enmap.
+        if (client.points.get(messagekey, "maxgp") < curgpmessage) {
+          client.points.set(messagekey, curgpmessage, "maxgp");
+        }
+        if (client.points.get(reactionkey, "maxgp") < curgpreaction) {
+          client.points.set(messagekey, curgpreaction, "maxgp");
+        }
       }
     }
+    // if (message.guild && message.author.id !== user.id && !message.author.bot && !user.bot) {
+    //   const messagekey = `${message.guild.id}-${message.author.id}`;
+    //   const reactionkey = `${message.guild.id}-${user.id}`;
+    //
+    //   //triggers for new users
+    //   client.points.ensure(messagekey, {
+    //     user: message.author.id,
+    //     guild: message.guild.id,
+    //     points: 0,
+    //     level: 1
+    //   });
+    //   client.points.ensure(reactionkey, {
+    //     user: user.id,
+    //     guild: message.guild.id,
+    //     points: 0,
+    //     level: 1
+    //   });
+    //
+    //   let messagepoints = client.points.get(messagekey, "points");
+    //   let reactionpoints = client.points.get(reactionkey, "points");
+    //
+    //   //increment points
+    //   if (messagepoints >= 10){
+    //     client.points.math(messagekey, "-", 10, "points");
+    //   } else {
+    //     client.points.set(messagekey, 0, "points");
+    //   }
+    //   if (reactionpoints >= 2){
+    //     client.points.math(reactionkey, "-", 2, "points");
+    //   } else {
+    //     client.points.set(reactionkey, 0, "points");
+    //   }
+    // }
     return;
   }
   //starboard code

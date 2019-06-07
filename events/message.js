@@ -30,8 +30,10 @@ module.exports = (client, message) => {
   }
 
   //Point system
-  let channel = client.channels.get(`177135064092639232`);
+
   if (message.guild && !message.author.bot) {
+    let channel = message.guild.channels.find(c => c.name.includes("general"));
+
     const key = `${message.guild.id}-${message.author.id}`;
 
     //triggers for new users
@@ -39,21 +41,31 @@ module.exports = (client, message) => {
       user: message.author.id,
       guild: message.guild.id,
       points: 0,
-      level: 1
+      level: 1,
+      gp: 0,
+      maxgp: 0
     });
 
     //client.points.delete(`${message.guild.id}-173741422313209857`);
 
-    //increment points
-    client.points.inc(key, "points");
+    if (message.channel === channel) {
 
-    // Calculate the user's current level
-    const curLevel = Math.floor(0.1 * Math.sqrt(client.points.get(key, "points")));
+      //increment points
+      client.points.inc(key, "points");
+      client.points.math(key, "+", 10, "gp");
 
-    // Act upon level up by sending a message and updating the user's level in enmap.
-    if (client.points.get(key, "level") < curLevel) {
-      channel.send(`${message.author} grew to LV.${curLevel}!`);
-      client.points.set(key, curLevel, "level");
+      // Calculate the user's current level
+      const curLevel = Math.floor(0.1 * Math.sqrt(client.points.get(key, "points")));
+      const curgp = client.points.get(key, "gp")
+
+      // Act upon level up by sending a message and updating the user's level in enmap.
+      if (client.points.get(key, "level") < curLevel) {
+        channel.send(`${message.author} grew to LV.${curLevel}!`);
+        client.points.set(key, curLevel, "level");
+      }
+      if (client.points.get(key, "maxgp") < curgp) {
+        client.points.set(key, curgp, "maxgp");
+      }
     }
   }
 
