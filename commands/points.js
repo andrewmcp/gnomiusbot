@@ -1,7 +1,8 @@
 exports.run = (client, message, args, con) => {
 
   const key = `${message.guild.id}-${message.author.id}`;
-  let channel = client.channels.get(`177135064092639232`);
+  let channel = message.guild.channels.find(c => c.name.includes("general"));
+  if (channel === null) return message.channel.send("There needs to be a text channel with general in the name for points to work.");
 
   switch (args[0]) {
     case undefined :
@@ -34,58 +35,7 @@ exports.run = (client, message, args, con) => {
 
       break;
 
-    case "gamble" :
-      if (args[1] === undefined) return;
-      if (message.channel.id === "177135064092639232") return;
-      let amountstring = args[1];
-      let amount = parseInt(args[1]);
-      if (isNaN(amount)) return;
-      if (amount === null) return;
-      let points = client.points.get(key, "points");
-      if (amountstring.endsWith("%")) {
-        percentage = parseInt(amountstring.replace("%", ""))/100
-        amount = Math.floor(points * percentage)
-      }
-      if (amount > points) return message.reply("you don't have that many points. <a:clown:575297966114340874>");
-      var min=0;
-      var max=2;
-      var random =Math.floor(Math.random() * (+max - +min)) + +min;
-      if (random == 0) {
 
-        client.points.math(key, "+", amount-1, "points");
-
-        message.reply(`you gambled ${amount} and won, you now have ${client.points.get(key, "points")} points.`);
-
-        // Calculate the user's current level
-        const curLevel = Math.floor(0.1 * Math.sqrt(client.points.get(key, "points")));
-
-        // Act upon level up by sending a message and updating the user's level in enmap.
-        if (client.points.get(key, "level") < curLevel) {
-          channel.send(`${message.author} grew to LV.${curLevel}!`);
-          client.points.set(key, curLevel, "level");
-        }
-
-      } else {
-
-        client.points.math(key, "-", amount, "points");
-
-        message.reply(`you gambled ${amount} and lost, you now have ${client.points.get(key, "points")} points.`);
-
-        // Calculate the user's current level
-        let curLevel = Math.floor(0.1 * Math.sqrt(client.points.get(key, "points")));
-        if (curLevel === 0) {
-          curLevel = 1
-        }
-
-        // // Act upon level up by sending a message and updating the user's level in enmap.
-        // if (client.points.get(key, "level") > curLevel) {
-        //   message.channel.send(`${message.author} returned to LV.${curLevel}!`);
-        //   client.points.set(key, curLevel, "level");
-        // }
-
-      }
-
-      break;
 
     // case "refresh" :
     //   if (message.author.id !== client.auth.ownerID) {
@@ -114,19 +64,79 @@ exports.run = (client, message, args, con) => {
         return;
       }
       //console.log(client.points)
-      // client.points.ensure(`${message.guild.id}-userid`, {
-      //   user: "173741422313209857",
+      // client.points.ensure(`${message.guild.id}-131229038323695617`, {
+      //   user: "131229038323695617",
       //   guild: message.guild.id,
       //   points: 0,
-      //   level: 1
+      //   level: 1,
+      //   gp: 0,
+      //   maxgp: 0
       // });
 
-      //client.points.set(`${message.guild.id}-185414973206429696`,2977 , "points")
-      //client.points.set(`${message.guild.id}-userid`,5 , "level")
+       client.points.set(`${message.guild.id}-185414973206429696`,6894 , "points")
+      // client.points.set(`${message.guild.id}-268188229000232961`,15114 , "maxgp")
 
-      //client.points.delete(`${message.guild.id}-185414973206429696`);
+      // client.points.delete(`${message.guild.id}-185414973206429696`);
+      // client.points.delete(`384789752236343297-268464769562968066`);
+      // client.points.delete(`575473849705955339-185414973206429696`);
+      // client.points.delete(`${message.guild.id}-213368497944789002`);
+      // client.points.delete(`${message.guild.id}-287452025602572289`);
+      // client.points.delete(`${message.guild.id}-185401930892312576`);
 
        break;
+
+       // case "gamble" :
+       //   if (args[1] === undefined) return;
+       //   if (message.channel.id === "177135064092639232") return;
+       //   let amountstring = args[1];
+       //   let amount = parseInt(args[1]);
+       //   if (isNaN(amount)) return;
+       //   if (amount === null) return;
+       //   let gp = client.points.get(key, "gp");
+       //   if (amountstring.endsWith("%")) {
+       //     percentage = parseInt(amountstring.replace("%", ""))/100
+       //     amount = Math.floor(points * percentage)
+       //   }
+       //   if (amount > gp) return message.reply("you don't have that much gp. <a:clown:575297966114340874>");
+       //   var min=0;
+       //   var max=2;
+       //   var random =Math.floor(Math.random() * (+max - +min)) + +min;
+       //   if (random == 0) {
+       //
+       //     client.points.math(key, "+", amount-1, "gp");
+       //
+       //     message.reply(`you gambled ${amount} and won, you now have ${client.points.get(key, "gp")} gp.`);
+       //
+       //     // Calculate the user's current level
+       //     const curLevel = Math.floor(0.1 * Math.sqrt(client.points.get(key, "gp")));
+       //
+       //     // Act upon level up by sending a message and updating the user's level in enmap.
+       //     if (client.points.get(key, "level") < curLevel) {
+       //       channel.send(`${message.author} grew to LV.${curLevel}!`);
+       //       client.points.set(key, curLevel, "level");
+       //     }
+       //
+       //   } else {
+       //
+       //     client.points.math(key, "-", amount, "gp");
+       //
+       //     message.reply(`you gambled ${amount} and lost, you now have ${client.points.get(key, "gp")} gp.`);
+       //
+       //     // Calculate the user's current level
+       //     // let curgp = client.points.get(key, "gp");
+       //
+       //     // if (curgp === 0) {
+       //     //   curgp = 1
+       //     // }
+       //     // // Act upon level up by sending a message and updating the user's level in enmap.
+       //     // if (client.points.get(key, "level") > curLevel) {
+       //     //   message.channel.send(`${message.author} returned to LV.${curLevel}!`);
+       //     //   client.points.set(key, curLevel, "level");
+       //     // }
+       //
+       //   }
+       //
+       //   break;
 
   }
 }

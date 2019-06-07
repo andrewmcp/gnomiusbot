@@ -24,7 +24,7 @@ exports.run = (client, message, args, con) => {
     emojis += `<${isanimated}:${emojiname}:${emoji_id}> `
   }
 
-  message.channel.send(emojis)
+  message.channel.send(emojis).catch(console.error)
     .then(message.delete());
 
 }

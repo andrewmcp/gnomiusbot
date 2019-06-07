@@ -5,16 +5,16 @@ exports.run = (client, message, args, con) => {
   const filtered = client.points.filter( p => p.guild === message.guild.id ).array();
 
   // Sort it to get the top results... well... at the top. Y'know.
-  const sorted = filtered.sort((a, b) => b.points - a.points);
+  const sorted = filtered.sort((a, b) => b.gp - a.gp);
 
   // Slice it, dice it, get the top 10 of it!
   const top10 = sorted.splice(0, 10);
 
   // Now shake it and show it! (as a nice embed, too!)
   const embed = new Discord.RichEmbed()
-    .setTitle("**Leaderboard**")
+    .setTitle("**Bank**")
     //.setAuthor(client.user.username, client.user.avatarURL)
-    .setDescription(`${message.guild.name} top 10 points leaders!`)
+    .setDescription(`${message.guild.name} top 10 gp leaders!`)
     .setColor("#8c8b30")
     .setFooter("© qix", client.user.avatarURL)
     .setTimestamp()
@@ -29,9 +29,9 @@ exports.run = (client, message, args, con) => {
       king = ""
     }
     embed.addField(position + ". " + message.guild.members.get(data.user).displayName + king
-    , `${data.points} points (level ${data.level})`)
+    , `${data.gp} gp (highest ${data.maxgp} gp)`)
     i++
   }
   message.delete();
-  return channel.send({embed});
+  channel.send({embed});
 }
