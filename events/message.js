@@ -25,14 +25,27 @@ module.exports = (client, message) => {
   }
 
   //react to words
-  if (message.content.toLowerCase().includes(client.words.react.join("|"))) {
-    message.react(client.emojis.get('582279381905571853')).catch(console.error);
+  for (i = 0; i < client.words.react.length; i++) {
+    if (message.content.toLowerCase().includes(client.words.react[i].toLowerCase())) {
+      message.react(client.emojis.get('582279381905571853')).catch(console.error);
+    }
   }
+
+  // //delete messages with banned words
+  // for (i = 0; i < client.words.banned.length; i++) {
+  //   if (message.content.toLowerCase().includes(client.words.banned[i].toLowerCase())) {
+  //     message.delete().catch(console.error);
+  //   }
+  // }
 
   //Point system
 
   if (message.guild && !message.author.bot) {
     let channel = message.guild.channels.find(c => c.name.includes("general"));
+
+    if (message.member.roles.has("585269096019525635")) {
+      return;
+    }
 
     const key = `${message.guild.id}-${message.author.id}`;
 
@@ -43,15 +56,19 @@ module.exports = (client, message) => {
       points: 0,
       level: 1,
       gp: 0,
-      maxgp: 0
+      maxgp: 0,
+      credit: 0,
+      pointboost: 0
     });
 
     //client.points.delete(`${message.guild.id}-173741422313209857`);
 
     if (message.channel === channel) {
 
+      let pointboost = client.points.get(key, "pointboost")
+
       //increment points
-      client.points.inc(key, "points");
+      client.points.math(key, "+", 1 + pointboost, "points");
       client.points.math(key, "+", 10, "gp");
 
       // Calculate the user's current level

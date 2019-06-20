@@ -27,7 +27,7 @@ module.exports = (client) => {
       .setFooter("© qix", client.user.avatarURL)
       .setTimestamp()
     channel.send(lootboxarrival).then(() => {
-      channel.awaitMessages(filter, { maxMatches: 1, time: 60000, errors: ['time'] })
+      channel.awaitMessages(filter, { maxMatches: 1, time: 600000, errors: ['time'] })
       .then(collected => {
         const lootboxopened = new Discord.RichEmbed()
           .setDescription(`${collected.first().author} opened the lootbox and got ${lbxgp.toString()} gp!`)
@@ -43,7 +43,9 @@ module.exports = (client) => {
           points: 0,
           level: 1,
           gp: 0,
-          maxgp: 0
+          maxgp: 0,
+          credit: 0,
+          pointboost: 0
         });
 
 
@@ -61,6 +63,7 @@ module.exports = (client) => {
       })
       .catch(collected => {
         channel.send(lootboxdestroyed);
+        setTimeout(lootboxcall, 60000);
       })
     })
     return;

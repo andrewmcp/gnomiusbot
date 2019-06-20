@@ -22,7 +22,9 @@ module.exports = async function(client, reaction, user) {
           points: 0,
           level: 1,
           gp: 0,
-          maxgp: 0
+          maxgp: 0,
+          credit: 0,
+          pointboost: 0
         });
         client.points.ensure(reactionkey, {
           user: user.id,
@@ -30,14 +32,19 @@ module.exports = async function(client, reaction, user) {
           points: 0,
           level: 1,
           gp: 0,
-          maxgp: 0
+          maxgp: 0,
+          credit: 0,
+          pointboost: 0
         });
 
         if (message.channel === channel) {
 
+          let messagepointboost = client.points.get(messagekey, "pointboost")
+          let reactionpointboost = client.points.get(reactionkey, "pointboost")
+
           //increment points
-          client.points.math(messagekey, "+", 10, "points");
-          client.points.math(reactionkey, "+", 2, "points");
+          client.points.math(messagekey, "+", 10 + messagepointboost, "points");
+          client.points.math(reactionkey, "+", 2 + reactionpointboost, "points");
 
           // Calculate the user's current level
           const curLevelmessage = Math.floor(0.1 * Math.sqrt(client.points.get(messagekey, "points")));
@@ -64,7 +71,9 @@ module.exports = async function(client, reaction, user) {
           points: 0,
           level: 1,
           gp: 0,
-          maxgp: 0
+          maxgp: 0,
+          credit: 0,
+          pointboost: 0
         });
         client.points.ensure(reactionkey, {
           user: user.id,
@@ -72,7 +81,9 @@ module.exports = async function(client, reaction, user) {
           points: 0,
           level: 1,
           gp: 0,
-          maxgp: 0
+          maxgp: 0,
+          credit: 0,
+          pointboost: 0
         });
 
         //increment points

@@ -20,15 +20,15 @@ exports.run = (client, message, args, con) => {
     .setTimestamp()
 
     let i = 1;
-    let king = ""
+    let baller = ""
   for(const data of top10) {
     position = i.toString();
     if (i === 1) {
-      king = " 👑"
+      baller = " 💸"
     } else {
-      king = ""
+      baller = ""
     }
-    embed.addField(position + ". " + message.guild.members.get(data.user).displayName + king
+    embed.addField(position + ". " + message.guild.members.get(data.user).displayName + baller
     , `${data.gp} gp (highest ${data.maxgp} gp)`)
     i++
   }

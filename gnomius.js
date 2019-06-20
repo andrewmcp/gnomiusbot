@@ -11,6 +11,7 @@ client.auth = gnomius_auth;
 client.package = gnomius_package;
 client.words = gnomius_words;
 client.points = new Enmap({name: "points"});
+client.entrance = new Enmap({name: "entrance"});
 
 fs.readdir("./events/", (err, files) => {
   if (err) return console.error(err);

@@ -16,6 +16,8 @@ exports.run = (client, message, args, con) => {
 
     .addField("Information",
       "You ||suck||.")
+    .addField("test <:ez:583049694188404815>",
+      "test <:ez:583049694188404815>")
       /*
       * Inline fields may not display as inline if the thumbnail and/or image is too big.
       */

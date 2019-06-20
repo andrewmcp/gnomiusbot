@@ -63,7 +63,7 @@ exports.run = (client, message, args, con) => {
         message.reply("You are not worthy.")
         return;
       }
-      //console.log(client.points)
+
       // client.points.ensure(`${message.guild.id}-131229038323695617`, {
       //   user: "131229038323695617",
       //   guild: message.guild.id,
@@ -73,15 +73,16 @@ exports.run = (client, message, args, con) => {
       //   maxgp: 0
       // });
 
-       client.points.set(`${message.guild.id}-185414973206429696`,6894 , "points")
+      // client.points.set(`${message.guild.id}-185414973206429696`,6894 , "points")
       // client.points.set(`${message.guild.id}-268188229000232961`,15114 , "maxgp")
+      //client.points.set(`${message.guild.id}-185414973206429696`,0 , "pointboost")
+      //client.points.set(`${message.guild.id}-311204941064568833`,0 , "credit")
+
 
       // client.points.delete(`${message.guild.id}-185414973206429696`);
       // client.points.delete(`384789752236343297-268464769562968066`);
-      // client.points.delete(`575473849705955339-185414973206429696`);
-      // client.points.delete(`${message.guild.id}-213368497944789002`);
-      // client.points.delete(`${message.guild.id}-287452025602572289`);
-      // client.points.delete(`${message.guild.id}-185401930892312576`);
+
+      console.log(client.points)
 
        break;
 

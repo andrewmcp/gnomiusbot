@@ -1,8 +1,11 @@
 module.exports = (client, oldMember, newMember) => {
+  if (newMember.user.bot) return;
   let oldChannelid = oldMember.voiceChannel ? oldMember.voiceChannel.id : null;
   let newChannelid = newMember.voiceChannel ? newMember.voiceChannel.id : null;
   let oldChannel = oldMember.voiceChannel;
   let newChannel = newMember.voiceChannel;
+  const key = `${newMember.guild.id}-${newMember.id}`;
+  const request = require('request');
   if (oldChannelid === newChannelid) {
     return
   } // If there has been no change, exit
@@ -44,107 +47,30 @@ module.exports = (client, oldMember, newMember) => {
 
     var variations = 0 ;
     var variation = 0 ;
-    var intros = [] ;
+
+    //triggers for new users
+    client.entrance.ensure(key, {
+      user: newMember.id,
+      guild: newMember.guild.id,
+      sounds: []
+    });
+
+    let entrancesounds = client.entrance.get(key, "sounds")
+    console.log(entrancesounds)
 
     let conn = client.voiceConnections.get(newMember.guild.id);
     if (!conn) throw new Error("The bot is not in a voiceChannel, fix your code.");
 
-    switch (newMember.id) {
-      case "268464769562968066" :
-        intros = [
-          'D:/Programs/bot/gnomius/sounds/Wassap.mp3',
-          'D:/Programs/bot/gnomius/sounds/alexintro.mp3',
-          'D:/Programs/bot/gnomius/sounds/alexintro2.mp3',
-          'D:/Programs/bot/gnomius/sounds/alexintro3.mp3',
-          'D:/Programs/bot/gnomius/sounds/alexintro4.mp3',
-          'D:/Programs/bot/gnomius/sounds/alexintro5.mp3',
-          'D:/Programs/bot/gnomius/sounds/arminintro.mp3',
-          'D:/Programs/bot/gnomius/sounds/arminintro2.mp3',
-          'D:/Programs/bot/gnomius/sounds/alexintro8.mp3',
-          'D:/Programs/bot/gnomius/sounds/alexintro9.mp3'
-        ]
-        variations = intros.length ;
-        variation = Math.floor(Math.random() * (+variations));
+    if (newMember.roles.has("585269096019525635")) {
+      return;
+    }
 
-        conn.playFile(intros[variation]);
-
-        break;
-
-      case "260938555071791104" :
-        intros = [
-          'D:/Programs/bot/gnomius/sounds/watchyojet.mp3',
-          'D:/Programs/bot/gnomius/sounds/aliintro.mp3',
-          'D:/Programs/bot/gnomius/sounds/aliintro3.mp3'
-        ]
-        variations = intros.length ;
-        variation = Math.floor(Math.random() * (+variations));
-
-        conn.playFile(intros[variation]);
-
-        break;
-
-      case "173741422313209857" :
-        intros = [
-          'D:/Programs/bot/gnomius/sounds/meladintro.mp3',
-          'D:/Programs/bot/gnomius/sounds/meladintro2.mp3'
-        ]
-        variations = intros.length ;
-        variation = Math.floor(Math.random() * (+variations));
-
-        conn.playFile(intros[variation]);
-
-        break;
-
-      case "185414973206429696" :
-        intros = [
-          'D:/Programs/bot/gnomius/sounds/andrewintro.mp3'
-        ]
-        variations = intros.length ;
-        variation = Math.floor(Math.random() * (+variations));
-
-        conn.playFile(intros[variation]);
-
-        break;
-
-      case "277504301532708865" :
-        intros = [
-          'D:/Programs/bot/gnomius/sounds/dilanintro.mp3'
-        ]
-        variations = intros.length ;
-        variation = Math.floor(Math.random() * (+variations));
-
-        conn.playFile(intros[variation]);
-
-        break;
-
-      case "268188229000232961" :
-        intros = [
-          'D:/Programs/bot/gnomius/sounds/arminintro3.mp3',
-          'D:/Programs/bot/gnomius/sounds/arminintro4.mp3',
-          'D:/Programs/bot/gnomius/sounds/arminintro5.mp3'
-        ]
-        variations = intros.length ;
-        variation = Math.floor(Math.random() * (+variations));
-
-        conn.playFile(intros[variation]);
-
-        break;
-
-      case "178304347816329217" :
-        intros = [
-          'D:/Programs/bot/gnomius/sounds/kaveintro.mp3'
-        ]
-        variations = intros.length ;
-        variation = Math.floor(Math.random() * (+variations));
-
-        conn.playFile(intros[variation]);
-
-        break;
-
-    // case "memberid" :
-    //   conn.playFile('D:/Programs/bot/gnomius/sounds/file.mp3');
-    //   break;
-  }
+    if (entrancesounds === undefined || entrancesounds == 0) return;
+    variations = entrancesounds.length ;
+    variation = Math.floor(Math.random() * (+variations));
+    const streamOptions = { seek: 0, volume: 1 };
+    let readablestream = request.get(entrancesounds[variation]);
+    const dispatcher = conn.playStream(readablestream, streamOptions);
 
   } else if (oldChannelid === sendmessageChannelid) {
     if (oldChannel.members.size === 1) {

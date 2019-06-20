@@ -1,5 +1,5 @@
 module.exports = (client, member, speaking) => {
-  if (!member.user.bot && member.voiceChannel.members.size > 1) {
+  if (!member.user.bot && member.voiceChannel.members.size > 2) {
     let channel = member.guild.channels.find(c => c.name.includes("general"));
     if (channel === null) return message.channel.send("There needs to be a text channel with general in the name for points to work.");
     if (speaking) {
@@ -24,12 +24,15 @@ module.exports = (client, member, speaking) => {
         points: 0,
         level: 1,
         gp: 0,
-        maxgp: 0
+        maxgp: 0,
+        credit: 0,
+        pointboost: 0
       });
 
       //client.points.delete(`${message.guild.id}-173741422313209857`);
+      let pointboost = client.points.get(key, "pointboost")
 
-      let points = Math.floor(timedif/1000)
+      let points = Math.floor((timedif * (pointboost + 1))/1000)
 
       //increment points
       client.points.math(key, "+", points, "points");
