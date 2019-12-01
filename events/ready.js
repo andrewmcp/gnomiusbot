@@ -6,7 +6,7 @@ module.exports = (client) => {
   //random points lootbox in gnomius server
   var Discord = require("discord.js");
   var min=0;
-  var max=10800000;
+  var max=43200000;
   var random =Math.floor(Math.random() * (+max - +min)) + +min;
   let channel = client.channels.get(`177135064092639232`);
   let announcementchannel = client.channels.get(`585772005522145282`)
@@ -15,7 +15,7 @@ module.exports = (client) => {
     const filter = response => {
       return "open" === response.content.toLowerCase();
     };
-    let lbxgp = 5000 + Math.floor(random/2160);
+    let lbxgp = 10000 + Math.floor(random/4320);
     let lootboxarrival = new Discord.RichEmbed()
       .setDescription(`A lootbox has just arrived, to open it send a message saying: open`)
       .setColor("#8c8b30")
@@ -70,12 +70,12 @@ module.exports = (client) => {
   }
 
   function lootboxcall() {
-    let lootboxsent = new Discord.RichEmbed()
-      .setDescription(`A new lootbox is on the way, it will arrive within ${max/3600000} hours.`)
-      .setColor("#8c8b30")
-      .setFooter("© qix", client.user.avatarURL)
-      .setTimestamp()
-    announcementchannel.send(lootboxsent)
+    // let lootboxsent = new Discord.RichEmbed()
+    //   .setDescription(`A new lootbox is on the way, it will arrive within ${max/3600000} hours.`)
+    //   .setColor("#8c8b30")
+    //   .setFooter("© qix", client.user.avatarURL)
+    //   .setTimestamp()
+    // announcementchannel.send(lootboxsent)
     random = Math.floor(Math.random() * (+max - +min)) + +min;
     setTimeout(lootbox, random)
   }

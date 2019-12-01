@@ -34,6 +34,8 @@ module.exports = (client, member, speaking) => {
 
       let points = Math.floor((timedif * (pointboost + 1))/1000)
 
+      console.log("voice dected")
+
       //increment points
       client.points.math(key, "+", points, "points");
       client.points.math(key, "+", 10, "gp");

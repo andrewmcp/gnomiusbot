@@ -12,8 +12,8 @@ module.exports = (client, oldMember, newMember) => {
 
   //Get the voiceChannel where something should happen
   if (oldMember.guild.id !== "177135064092639232") return;
-  let sendmessageChannelid = oldMember.guild.channels.get('177135064092639233').id;
-  let sendmessageChannel = oldMember.guild.channels.get('177135064092639233');
+  let sendmessageChannelid = oldMember.guild.channels.get('598591818552049700').id;
+  let sendmessageChannel = oldMember.guild.channels.get('598591818552049700');
 
   let gnomiusjoined = sendmessageChannel.members.has('575452295509180443');
 
@@ -42,8 +42,9 @@ module.exports = (client, oldMember, newMember) => {
 
 
     // console.log("A user joined.");
-
-    textChannel.send(newMember.displayName + " joined.");
+    if (newMember.id === '173741422313209857') {
+      textChannel.send(newMember.displayName + " joined.");
+    }
 
     var variations = 0 ;
     var variation = 0 ;
@@ -56,7 +57,7 @@ module.exports = (client, oldMember, newMember) => {
     });
 
     let entrancesounds = client.entrance.get(key, "sounds")
-    console.log(entrancesounds)
+    //console.log(entrancesounds)
 
     let conn = client.voiceConnections.get(newMember.guild.id);
     if (!conn) throw new Error("The bot is not in a voiceChannel, fix your code.");
@@ -77,6 +78,9 @@ module.exports = (client, oldMember, newMember) => {
       oldChannel.leave()
     }
     // console.log("A user left.");
-    textChannel.send(newMember.displayName + " left.");
+    if (newMember.id === '173741422313209857') {
+      textChannel.send(newMember.displayName + " left.");
+    }
+    //textChannel.send(newMember.displayName + " left.");
   }
 }

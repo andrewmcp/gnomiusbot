@@ -103,6 +103,42 @@ module.exports = async function(client, reaction, user) {
         }
       }
     }
+
+    //decisions code
+    if (reaction.emoji.name === '✔️' || reaction.emoji.name === '❌') {
+      const decisionsChannel = message.guild.channels.find(channel => channel.name === "decisions")
+      const voteChannel = message.guild.channels.find(channel => channel.name === "poll-booth")
+      if (!decisionsChannel) return message.channel.send(`It appears that you do not have a decisions channel.`);
+      if (!voteChannel) return message.channel.send(`It appears that you do not have a voting channel.`);
+      const votesyay = message.reactions.filter(r => r.emoji.name == '✔️').map(reaction => reaction.count)[0];
+      const votesnay = message.reactions.filter(r => r.emoji.name == '❌').map(reaction => reaction.count)[0];
+      const fetchedDecisionMessages = await decisionsChannel.fetchMessages({limit: 100});
+      const votefinalized = fetchedDecisionMessages.find(m => m.embeds[0].footer.text.startsWith('✔️') && m.embeds[0].footer.text.endsWith(message.id));
+      if (!votefinalized) {
+        var colour = 3066993
+        if (votesyay<votesnay) {
+          colour = 15158332
+        }
+
+        const voteimage = message.attachments.size > 0 ? await extension(reaction, message.attachments.array()[0].url) : '';
+        if (voteimage === '' && message.cleanContent.length < 1 && message.channel != decisionsChannel) return message.channel.send(`${user}, cannot see what you have decided.`);
+        const voteembed = new Discord.RichEmbed()
+          .setColor(colour)
+          .setDescription(message.cleanContent)
+          .setAuthor(message.member.displayName, message.author.displayAvatarURL)
+          .setTimestamp(new Date())
+          .setFooter(`✔️ ${votesyay} / ❌ ${votesnay} | ${message.id}`)
+          .setImage(voteimage);
+        if (votesyay >= 6 || votesnay >= 6) {
+          await decisionsChannel.send( voteembed )
+            .then(message.delete(5000))
+            .catch(console.error);
+        }
+
+      }
+
+    }
+
     return;
   }
   //starboard code:
@@ -152,9 +188,6 @@ module.exports = async function(client, reaction, user) {
     return attachment;
   }
 };
-
-
-
 
 // module.exports = (client, messageReaction) => {
 //     let emoji = messageReaction.emoji;

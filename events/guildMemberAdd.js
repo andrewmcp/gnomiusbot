@@ -29,6 +29,6 @@ module.exports = (client, member) => {
     .setFooter("© GNOMIUS", client.user.avatarURL)
     .setTimestamp()
 
-    member.guild.channels.get('177135064092639232').send({embed});
+    member.guild.channels.get("")//.send({embed});
 
   }
