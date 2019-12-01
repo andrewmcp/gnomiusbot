@@ -15,7 +15,7 @@ exports.run = (client, message, args, con) => {
     .setTitle("**Leaderboard**")
     //.setAuthor(client.user.username, client.user.avatarURL)
     .setDescription(`${message.guild.name} top 10 points leaders!`)
-    .setColor("#8c8b30")
+    .setColor("#a6bd5a")
     .setFooter("© qix", client.user.avatarURL)
     .setTimestamp()
 
@@ -28,9 +28,11 @@ exports.run = (client, message, args, con) => {
     } else {
       king = ""
     }
-    embed.addField(position + ". " + message.guild.members.get(data.user).displayName + king
-    , `${data.points} points (level ${data.level})`)
-    i++
+    if (message.guild.members.get(data.user) != undefined) {
+      embed.addField(position + ". " + message.guild.members.get(data.user).displayName + king
+      , `${data.points} points (level ${data.level})`)
+      i++
+    }
   }
   message.delete();
   return channel.send({embed});

@@ -1,12 +1,12 @@
 exports.run = (client, message, args, con) => {
   var Discord = require("discord.js");
   const embed = new Discord.RichEmbed()
-    .setTitle("New Member")
+    //.setTitle("New Member")
     /*
     * Alternatively, use "#00AE86", [0, 174, 134] or an integer number.
     */
-    .setColor("#8c8b30")
-    .setDescription("Welcome *" + "member" + "* to the **Gnomius** discord server!")
+    .setColor(3066993)
+    .setDescription("<vote expand the kitchen från bara voice till voice och text")
 
     //.setImage("http://i.imgur.com/yVpymuV.png")
     //.setThumbnail("URL")
@@ -14,10 +14,10 @@ exports.run = (client, message, args, con) => {
     * Takes a Date object, defaults to current date.
     */
 
-    .addField("Information",
-      "You ||suck||.")
-    .addField("test <:ez:583049694188404815>",
-      "test <:ez:583049694188404815>")
+    //.addField("Information",
+      //"You ||suck||.")
+    //.addField("test <:ez:583049694188404815>",
+      //"test <:ez:583049694188404815>")
       /*
       * Inline fields may not display as inline if the thumbnail and/or image is too big.
       */
@@ -27,12 +27,12 @@ exports.run = (client, message, args, con) => {
       */
       //.addBlankField(true)
       //.addField("Inline Field 3", "You can have a maximum of 25 fields.", true);
-      .setFooter("© GNOMIUS", client.user.avatarURL)
-      .setTimestamp()
+      .setFooter(`✔️ 5 / ❌ 2 | 648646459402747914`)
+      .setTimestamp(new Date())
 
 
     // .setTitle("This is your title, it can hold 256 characters")
-    // .setAuthor("Author Name", "https://i.imgur.com/lm8s41J.png")
+    .setAuthor(message.member.displayName, message.author.displayAvatarURL)
     // /*
     //  * Alternatively, use "#00AE86", [0, 174, 134] or an integer number.
     //  */

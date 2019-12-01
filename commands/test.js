@@ -4,6 +4,9 @@ exports.run = (client, message, args, con) => {
     return;
   }
 
+  const key = `${message.member.guild.id}-${message.member.id}`;
+  const request = require('request');
+
   let voiceChannel = client.channels.get('177135064092639233')
   let gnomiusjoined = voiceChannel.members.has('575452295509180443');
 
@@ -14,9 +17,15 @@ exports.run = (client, message, args, con) => {
   }
 
   let conn = client.voiceConnections.get(voiceChannel.guild.id);
-  if (!conn) throw new Error("The bot is not in a voiceChannel, fix your code.");
+  if (!conn) return console.log("fix code");
 
-  let path = 'D:/Programs/bot/gnomius/sounds/aliintro3.mp3';
-  conn.playFile(path);
-
+  //let path = '';
+  //conn.playFile(path);
+  let entrancesounds = client.entrance.get(key, "sounds")
+  if (entrancesounds === undefined || entrancesounds == 0) return;
+  variations = entrancesounds.length ;
+  variation = Math.floor(Math.random() * (+variations));
+  const streamOptions = { seek: 0, volume: 1 };
+  let readablestream = request.get(entrancesounds[variation]);
+  const dispatcher = conn.playStream(readablestream, streamOptions);
 }

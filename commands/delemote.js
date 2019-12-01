@@ -1,4 +1,8 @@
 exports.run = (client, message, args, con) => {
+  if (message.member.hasPermission("MANAGE_EMOJIS", true, true, true) == false && message.author.id !== client.auth.ownerID) {
+    message.reply("You are not worthy.")
+    return;
+  }
   let emojiname = args[0];
   let reason = args[1];
 

@@ -6,6 +6,8 @@ exports.run = (client, message, args, con) => {
 
   const request = require('request');
 
+  var Discord = require("discord.js");
+
   //triggers for new users
   client.entrance.ensure(key, {
     user: message.author.id,
@@ -25,7 +27,7 @@ exports.run = (client, message, args, con) => {
       console.log(entrancesounds)
 
       let conn = client.voiceConnections.get(message.guild.id);
-      if (!conn) throw new Error("The bot is not in a voiceChannel, fix your code.");
+      if (!conn) return;
 
       if (entrancesounds === undefined || entrancesounds == 0) return;
 
@@ -39,7 +41,20 @@ exports.run = (client, message, args, con) => {
       //client.entrance.remove(key, 'https://instaud.io/_/3Q8v.mp3', "sounds")
     }
 
-
+  if (args[0] === "list") {
+    let soundlist = new Discord.RichEmbed()
+      .setTitle("Entrance sounds:")
+      .setColor("#8c8b30")
+      .setFooter("© qix", client.user.avatarURL)
+      .setTimestamp()
+      let soundliststring = ""
+      for (i = 0; i < entrancesounds.length; i++) {
+        soundliststring += entrancesounds[i] + "\n";
+      }
+      soundlist.setDescription(soundliststring)
+    message.author.send(soundlist);
+    //message.author.send('These are your entrance sounds:\n' + entrancesounds)
+  }
 
   if (args[1] === undefined) return;
   if (args[1].includes("https://instaud.io/")) {

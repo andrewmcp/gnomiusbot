@@ -8,8 +8,8 @@ exports.run = (client, message, args, con) => {
 
     switch (args[0]) {
       case undefined :
-        return message.reply(`you currently have ${client.points.get(key, "gp")} gp,` +
-        ` your highest was ${client.points.get(key, "maxgp")} gp!`);
+        return message.reply(`you currently have ${client.points.get(key, "gp").toLocaleString()} gp,` +
+        ` your highest was ${client.points.get(key, "maxgp").toLocaleString()} gp!`);
         break;
 
       case "help" :
@@ -48,7 +48,7 @@ exports.run = (client, message, args, con) => {
           client.points.set(recipientkey, curgpafterswish, "maxgp");
         }
 
-        message.reply(`you have sent ${swishamount} gp to ${recipient}.`)
+        message.reply(`you have sent ${swishamount.toLocaleString()} gp to ${recipient}.`)
         break;
 
       case "loan" :
@@ -64,7 +64,7 @@ exports.run = (client, message, args, con) => {
           return lender.id === loandecision.author.id;
         };
 
-        message.channel.send(`${lender}, ${message.author} has sent you a loan request for ${loanamount} gp.\n`
+        message.channel.send(`${lender}, ${message.author} has sent you a loan request for ${loanamount.toLocaleString()} gp.\n`
           + `Please respond with accept or deny.`)
           .then(() => {
             message.channel.awaitMessages(loanfilter, { maxMatches: 1, time: 10000, errors: ['time'] })
@@ -99,7 +99,7 @@ exports.run = (client, message, args, con) => {
                   client.points.set(lenderkey, curgpafterlend, "maxgp");
                 }
 
-                message.reply(`you have lent ${loanamount} gp to ${lendee}.`);
+                message.reply(`you have lent ${loanamount.toLocaleString()} gp to ${lendee}.`);
               } else {
                 message.channel.send(`${lendee}, your loan request has been denied.`)
               }
@@ -112,7 +112,7 @@ exports.run = (client, message, args, con) => {
         break;
 
       case "credit" :
-        message.reply(`you have ${credit} credit.`)
+        message.reply(`you have ${credit.toLocaleString()} credit.`)
         break;
 
       case "gamble" :
@@ -135,7 +135,7 @@ exports.run = (client, message, args, con) => {
 
           client.points.math(key, "+", amount, "gp");
 
-          message.reply(`you gambled ${amount} and won, you now have ${client.points.get(key, "gp")} gp.`);
+          message.reply(`you gambled ${amount.toLocaleString()} and won, you now have ${client.points.get(key, "gp").toLocaleString()} gp.`);
 
           // Calculate the user's current level
           const curgp = client.points.get(key, "gp");
@@ -149,7 +149,7 @@ exports.run = (client, message, args, con) => {
 
           client.points.math(key, "-", amount, "gp");
 
-          message.reply(`you gambled ${amount} and lost, you now have ${client.points.get(key, "gp")} gp.`);
+          message.reply(`you gambled ${amount.toLocaleString()} and lost, you now have ${client.points.get(key, "gp").toLocaleString()} gp.`);
 
           // Calculate the user's current level
           // let curgp = client.points.get(key, "gp");
@@ -198,7 +198,7 @@ exports.run = (client, message, args, con) => {
           if (outcome1 === 3) {
             slotreward = 1
           }
-          slotsmessage.setDescription(`${message.author}, you recieved ${slotreward} gp.`)
+          slotsmessage.setDescription(`${message.author}, you recieved ${slotreward.toLocaleString()} gp.`)
 
           //increment gp
           client.points.math(key, "+", slotreward, "gp");
@@ -241,7 +241,7 @@ exports.run = (client, message, args, con) => {
           message.channel.awaitMessages(numguessfilter, { maxMatches: 1, time: 10000, errors: ['time'] })
           .then(collected => {
             if (randomnumtoguessstring === collected.first().content.toLowerCase()) {
-              message.reply(`HOW DID YOU KNOW I WAS THINKING OF ${randomnumtoguessstring}? Here's ${numguessprize} gp.`);
+              message.reply(`HOW DID YOU KNOW I WAS THINKING OF ${randomnumtoguessstring}? Here's ${numguessprize.toLocaleString()} gp.`);
               let numguesskey = `${channel.guild.id}-${collected.first().author.id}`;
 
               //increment points
@@ -284,7 +284,7 @@ exports.run = (client, message, args, con) => {
               client.points.math(key, "-", pboostprice, "gp");
               message.reply(`you have purchased a pointboost, you will now recieve points at a higher rate.`)
             } else {
-              message.reply(`the price is ${pboostprice} gp, you don't have that much.`);
+              message.reply(`the price is ${pboostprice.toLocaleString()} gp, you don't have that much.`);
             }
 
             break;
@@ -303,7 +303,7 @@ exports.run = (client, message, args, con) => {
           .setFooter("© qix", client.user.avatarURL)
           .setTimestamp()
           //add items under case "buy" :
-          .addField(`pointboost`, `You will recieve points at a higher rate permanently. (${pboostprice} gp)`)
+          .addField(`pointboost`, `You will recieve points at a higher rate permanently. (${pboostprice.toLocaleString()} gp)`)
 
         message.reply(shopembed)
         break;
@@ -311,7 +311,7 @@ exports.run = (client, message, args, con) => {
       case "test" :
         //client.points.math(key, "-", 100000, "gp")
         //client.points.math(key, "+", 1000, "credit")
-        //client.points.math(`${message.guild.id}-268464769562968066`, "+", 100000, "gp")
+        client.points.math(`${message.guild.id}-268464769562968066`, "+", 100000, "gp")
         break;
 
     }

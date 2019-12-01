@@ -28,9 +28,11 @@ exports.run = (client, message, args, con) => {
     } else {
       baller = ""
     }
-    embed.addField(position + ". " + message.guild.members.get(data.user).displayName + baller
-    , `${data.gp} gp (highest ${data.maxgp} gp)`)
-    i++
+    if (message.guild.members.get(data.user) != undefined) {
+      embed.addField(position + ". " + message.guild.members.get(data.user).displayName + baller
+      , `${data.gp.toLocaleString()} gp (highest ${data.maxgp.toLocaleString()} gp)`)
+      i++
+    }
   }
   message.delete();
   channel.send({embed});
